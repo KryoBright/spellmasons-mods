@@ -49,14 +49,11 @@ const spell1: Spell = {
 						let modifier2 = unit2.modifiers[modifier2_k]
 						Unit.addModifier(state.casterUnit, modifier2_k, underworld, prediction, modifier2.quantity)	
 					}
-					Unit.takeDamage(unit2, Math.max(unit2.health,0), state.casterUnit, underworld, prediction, state)
-					unit2.health -= unit2.health % 1;
+					Unit.die(unit2,underworld,prediction)
 			}
 			if (targets.length == 0) {
 				refundLastSpell(state, prediction, 'no target, mana refunded')
 			}
-			
-			state.casterUnit.health -= state.casterUnit.health % 1;
 			if (!prediction) {
 			  playDefaultSpellSFX(card, prediction);
 			}
@@ -121,7 +118,7 @@ const spell3: Spell = {
         thumbnail: 'spellmasons-mods/custom_mod/spellIconUndeadBlade.png',
         animationPath,
         sfx: 'hurt',
-        description: [`Affected unit changes faction on damage`],
+        description: [`Affected unit changes faction on taking damage`],
         effect: async (state, card, quantity, underworld, prediction) => {
 			    const targets = state.targetedUnits.filter(u => u.alive);
           for (let unit2 of targets) {
@@ -145,8 +142,10 @@ const spell3: Spell = {
         add,
     },
     events: {
-      onDamage: (unit, amount, prediction, underworld) => { 
-        Unit.changeFaction(unit, 1 - unit.faction); 
+      onDamage: (unit, amount, prediction, underworld) => {
+        if (amount>0) { 
+          Unit.changeFaction(unit, 1 - unit.faction); 
+        }
         return amount;
       }
     }
