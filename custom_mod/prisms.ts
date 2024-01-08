@@ -5,7 +5,7 @@ const {
   commonTypes,
   MultiColorReplaceFilter,
 } = globalThis.SpellmasonsAPI;
-export const Unit = globalThis.SpellmasonsAPI.Unit;
+const Unit = globalThis.SpellmasonsAPI.Unit;
 const { CardCategory, probabilityMap, CardRarity } = commonTypes;
 
 const animationPath = 'spellUndeadBlade';
